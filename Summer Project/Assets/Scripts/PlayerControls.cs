@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 public class PlayerControls : MonoBehaviour
 {
@@ -13,19 +12,16 @@ public class PlayerControls : MonoBehaviour
     public CharacterController playerController;
     private Vector3 moveDirection;
     #endregion
-
+ 
     #region Text Variables
     private int pickUpCount;
-    public TextMeshProUGUI countText;
-    public GameObject winTextObject;
     #endregion
     // Start is called before the first frame update
     void Start()
     {
         pickUpCount = 0;
         playerController = GetComponent<CharacterController>();
-        setCountText();
-        winTextObject.SetActive(false);
+        FindObjectOfType<GameManager>().setCountText(pickUpCount);   
     }
 
     // Update is called once per frame
@@ -41,22 +37,18 @@ public class PlayerControls : MonoBehaviour
         playerController.Move(moveDirection * moveSpeed * Time.deltaTime);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other) //A function called whenever the player enters a trigger
     {
-        if (other.gameObject.CompareTag("PickUp"))
+        if (other.gameObject.CompareTag("PickUp")) //If the player hits a pickup...
         {
-            pickUpCount += 1;
-            setCountText();
-            other.gameObject.SetActive(false);
+            pickUpCount += 1; //Increment the score
+            FindObjectOfType<GameManager>().setCountText(pickUpCount); //Tell the Game Manager to update the score text
+            other.gameObject.SetActive(false); //Despawn the pickup game object
+        } else if (other.gameObject.CompareTag("Enemy")) // If the player hits an enemy...
+        {
+            gameObject.SetActive(false); //Despawn the player
+            FindObjectOfType<GameManager>().EndGame(); //Tell the Game Manager to reset the level
         }
     }
 
-    private void setCountText()
-    {
-        countText.text = pickUpCount.ToString();
-        if(pickUpCount == 12)
-        {
-            winTextObject.SetActive(true);
-        }
-    }
 }
