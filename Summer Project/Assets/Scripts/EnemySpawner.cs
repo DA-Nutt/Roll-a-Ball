@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public Vector3 spawnLocation;
+    public Vector3 spawnOffset;
     public GameObject spawnObject;
     public float yLocation;
     public float spawnRate;
@@ -12,20 +12,13 @@ public class EnemySpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        spawnLocation = new Vector3(transform.position.x, yLocation, transform.position.z);
-        //SpawnObject();
-        //InvokeRepeating("SpawnObject", 3f, spawnRate);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        spawnOffset = new Vector3(transform.position.x, yLocation, transform.position.z);
+        InvokeRepeating("SpawnObject", 3f, spawnRate);
     }
 
     void SpawnObject()
     {
-        Instantiate(spawnObject, spawnLocation, Quaternion.identity);
+        Instantiate(spawnObject, spawnOffset, Quaternion.identity);
     }
 
 }
