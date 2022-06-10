@@ -29,6 +29,7 @@ public class MoveInDirection : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Propels the Bullet forward every frame
         transform.Translate(moveDirection * Time.deltaTime * speed);
     }
 
